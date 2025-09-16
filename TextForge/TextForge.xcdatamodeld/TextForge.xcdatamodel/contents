@@ -1,9 +1,59 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="true" userDefinedModelVersionIdentifier="">
-    <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
-        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24299" systemVersion="25A354" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+    <entity name="CDCheckbox" representedClassName=".CDCheckbox" parentEntity="CDPlaceholder" syncable="YES">
+        <attribute name="defaultValue" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isChecked" optional="YES" transient="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="text" attributeType="String" defaultValueString=""/>
     </entity>
-    <elements>
-        <element name="Item" positionX="-63" positionY="-18" width="128" height="44"/>
-    </elements>
+    <entity name="CDItem" representedClassName=".CDItem" isAbstract="YES" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="template" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDTemplate" inverseName="items" inverseEntity="CDTemplate"/>
+    </entity>
+    <entity name="CDMenu" representedClassName=".CDMenu" parentEntity="CDPlaceholder" syncable="YES">
+        <attribute name="selection" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="options" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDMenuOption" inverseName="menu" inverseEntity="CDMenuOption"/>
+    </entity>
+    <entity name="CDMenuOption" representedClassName=".CDMenuOption" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="order" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="text" attributeType="String" defaultValueString=""/>
+        <relationship name="menu" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDMenu" inverseName="options" inverseEntity="CDMenu"/>
+    </entity>
+    <entity name="CDObject" representedClassName=".CDObject" isAbstract="YES" syncable="YES">
+        <attribute name="creationDate" attributeType="Date" defaultDateTimeInterval="693549300" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="order" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="title" attributeType="String" defaultValueString=""/>
+    </entity>
+    <entity name="CDPlaceholder" representedClassName=".CDPlaceholder" isAbstract="YES" parentEntity="CDItem" syncable="YES">
+        <attribute name="creationDate" attributeType="Date" defaultDateTimeInterval="693460020" usesScalarValueType="NO"/>
+        <attribute name="detail" optional="YES" attributeType="String"/>
+        <attribute name="label" attributeType="String" defaultValueString=""/>
+        <relationship name="orders" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDPlaceholderOrder" inverseName="placeholder" inverseEntity="CDPlaceholderOrder"/>
+    </entity>
+    <entity name="CDPlaceholderOrder" representedClassName=".CDPlaceholderOrder" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="order" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="placeholder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPlaceholder" inverseName="orders" inverseEntity="CDPlaceholder"/>
+    </entity>
+    <entity name="CDTag" representedClassName=".CDTag" parentEntity="CDObject" syncable="YES">
+        <relationship name="templates" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDTemplate" inverseName="tags" inverseEntity="CDTemplate"/>
+    </entity>
+    <entity name="CDTemplate" representedClassName=".CDTemplate" parentEntity="CDObject" syncable="YES">
+        <attribute name="attributedText" optional="YES" transient="YES" attributeType="Transformable" valueTransformerName="" customClassName="NSAttributedString"/>
+        <attribute name="detail" attributeType="String" defaultValueString=""/>
+        <attribute name="isFavorite" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="modificationDate" attributeType="Date" defaultDateTimeInterval="693078720" usesScalarValueType="NO"/>
+        <attribute name="rawText" transient="YES" attributeType="String" defaultValueString=""/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDItem" inverseName="template" inverseEntity="CDItem"/>
+        <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDTag" inverseName="templates" inverseEntity="CDTag"/>
+    </entity>
+    <entity name="CDText" representedClassName=".CDText" parentEntity="CDItem" syncable="YES">
+        <attribute name="order" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="text" attributeType="String" defaultValueString=""/>
+    </entity>
+    <entity name="CDTextField" representedClassName=".CDTextField" parentEntity="CDPlaceholder" syncable="YES">
+        <attribute name="defaultValue" attributeType="String" defaultValueString=""/>
+        <attribute name="text" transient="YES" attributeType="String" defaultValueString=""/>
+    </entity>
 </model>
